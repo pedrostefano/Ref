@@ -2,10 +2,15 @@
 
 ## Simples
 
-
-
-
 ## DevOPS
+
+- Create query to create indexes
+
+```sql
+SELECT 'CREATE INDEX IDX_' || table_name || '_' || column_name || ' ON "BDGD2018"."' || table_name || '" ("' || column_name || '");'
+FROM information_schema.columns
+WHERE table_schema = 'BDGD2018' and column_name= 'CTMT'
+```
 
 - Import CSV with Tab delimiter and Header
 
@@ -20,7 +25,7 @@ FROM 'C:\Concert\repository\eventos.txt' DELIMITER E'\t' CSV HEADER;
 create temp table TMP_X(nom text, nf text, nt text);
 COPY TMP_X FROM 'C:\Concert\repository\CHAVES.csv' DELIMITER ';' ;
 
-update floco."T_SWITCHES" 
+update floco."T_SWITCHES"
 set "NAME" = X."nom"
 from TMP_X X
 where floco."T_SWITCHES"."NODE_FROM" = X.nf and floco."T_SWITCHES"."NODE_TO" = X.nt;
@@ -34,6 +39,14 @@ drop table TMP_X;
 
 ```sql
 ST_AsGeoJSON(geom)::json->'coordinates' as COORD
+```
+
+- Create query to create geoindexes
+
+```sql
+SELECT 'CREATE INDEX IDX_' || table_name || '_' || column_name || ' ON "BDGD2018"."' || table_name || ' USING GIST (geom);'
+FROM information_schema.columns
+WHERE table_schema = 'BDGD2018' and column_name= 'geom'
 ```
 
 - Geo field of a Point to X and Y
