@@ -33,6 +33,19 @@ where floco."T_SWITCHES"."NODE_FROM" = X.nf and floco."T_SWITCHES"."NODE_TO" = X
 drop table TMP_X;
 ```
 
+- Move data between schemas
+
+```sql
+with deleted_data as (
+   delete from "BDGD2018"."ARAT"
+   where "DIST" = 382
+   returning *
+)
+insert into "LIGHT2018"."ARAT" ("GEOM", "COD_ID", "DIST", "FUN_PR", "FUN_TE", "DESCR", "SHAPE_LENGTH", "SHAPE_AREA")
+select "GEOM", "COD_ID", "DIST", "FUN_PR", "FUN_TE", "DESCR", "SHAPE_LENGTH", "SHAPE_AREA"
+from deleted_data;
+```
+
 ## POSTGIS
 
 - Geo field of a Multilinesegment to json and extract coordinates field
