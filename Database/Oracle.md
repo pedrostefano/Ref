@@ -2,14 +2,22 @@
 
 ## Básicos
 
-
-
 ## Query
+
+- Filtrar por data
+
+```sql
+WHERE
+COL >= to_date(:Timestamp,'YYYY-MM-DD HH24:MI:SS')
+```
 
 - Filtrar por string separada por virgula
 
 ```sql
-
+SELECT * FROM TABLE
+WHERE COLUMN IN (
+select regexp_substr("A,B,C,D",'[^,]+', 1, level) from dual
+connect by regexp_substr("A,B,C,D", '[^,]+', 1, level) is not null )
 ```
 
 - Filtrar por string separada por virgula Oracle 9i
