@@ -52,3 +52,14 @@ from
 (select SSDMT."COD_ID", SSDMT.geom from "BDGD2018"."SSDMT" SSDMT ) b
 where ST_Intersects(a.geom, b.geom);
 ```
+
+- Adjacent Feeders
+
+```sql
+select distinct s2."CTMT"
+from "BDGD2018"."SSDMT" s1
+left join "BDGD2018"."SSDMT" s2 on (s2."CTMT" <> 'NLAE733' and ST_touches(s1.geom, s2.geom))
+left join "BDGD2018"."UNSEMT" s3 on  (s3."CTMT" <> 'NLAE733' and ST_touches(s1.geom, s3.geom))
+where
+s1."CTMT" = 'NLAE733'
+```
