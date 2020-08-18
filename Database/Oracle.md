@@ -34,6 +34,16 @@ connect by regexp_substr("A,B,C,D", '[^,]+', 1, level) is not null )
 create user USERNAME identified by "PASSWORD";
 ```
 
+- Criar usuário com tablespace específico e cota
+
+```sql
+CREATE USER LIGHT
+  IDENTIFIED BY "2020light"
+  DEFAULT TABLESPACE LIGHTTBS
+  TEMPORARY TABLESPACE LIGHTTTEMPTBS
+  QUOTA 80000M on LIGHTTBS;
+```
+
 - Deletar usuário / schema
 
 ```sql
@@ -76,4 +86,33 @@ select sum(bytes)/1024/1024 size_in_mb from dba_data_files;
 
 select owner, sum(bytes)/1024/1024 Size_MB from dba_segments
 group  by owner;
+```
+
+- Listar tablespaces
+
+```sql
+SELECT 
+   tablespace_name, 
+   file_name, 
+   bytes / 1024/ 1024  MB
+FROM
+   dba_data_files;
+```
+
+
+- Criar  tablespace
+
+```sql
+CREATE TABLESPACE LIGHTTBS
+   DATAFILE 'lighttbs1.dbf'
+   SIZE 1m
+   AUTOEXTEND on;
+```
+
+- Criar tablespace temporário
+
+```sql
+CREATE TEMPORARY TABLESPACE LIGHTTTEMPTBS
+    TEMPFILE 'lighttemptbs.dbf'
+    SIZE 1000m;
 ```
