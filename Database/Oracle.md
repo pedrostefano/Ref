@@ -91,14 +91,13 @@ group  by owner;
 - Listar tablespaces
 
 ```sql
-SELECT 
-   tablespace_name, 
-   file_name, 
+SELECT
+   tablespace_name,
+   file_name,
    bytes / 1024/ 1024  MB
 FROM
    dba_data_files;
 ```
-
 
 - Criar  tablespace
 
@@ -115,4 +114,15 @@ CREATE TABLESPACE LIGHTTBS
 CREATE TEMPORARY TABLESPACE LIGHTTTEMPTBS
     TEMPFILE 'lighttemptbs.dbf'
     SIZE 1000m;
+```
+
+- Interromper datadump job
+
+```sql
+DECLARE
+v1 NUMBER;
+BEGIN
+v1:=DBMS_DATAPUMP.ATTACH('SYS_EXPORT_FULL_05','SYS');
+DBMS_DATAPUMP.STOP_JOB (v1,1,0);
+END;
 ```
