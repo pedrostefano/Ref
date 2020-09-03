@@ -1,3 +1,5 @@
+# KSQLDB
+
 - Executar query e receber alterações via REST
 
 ```shell
@@ -18,13 +20,31 @@ curl -X "POST" "http://localhost:8088/query" \
 }'
 ```
 
-# KSQL
+## KSQL
 
 - Começar do primeiro valor
 
 ```sql
 SET 'auto.offset.reset' = 'earliest';
 ```
+
+- Listar streams / tabelas / queires / conectores
+
+`show streams;`
+
+`show show tables;`
+
+`show queries;`
+
+`show connectors`
+
+- Remover stream / tabela / query 
+
+`drop stream NAME`
+
+`drop table NAME`
+
+`terminate NAME`
 
 - Selecionar dados e emitir alterações
 
@@ -46,7 +66,34 @@ INSERT INTO transactions (
 );
 ```
 
-- Criar stream
+- Listar todas as mensagens de um topic
+
+```sql
+PRINT "xomni-get-commands" FROM BEGINNING;
+```
+
+- Criar stream - Exemplo SCADA
+
+```sql
+CREATE STREAM HISTORIC (
+ DT_DATA VARCHAR,
+ CH_TAG VARCHAR,
+ CH_TIPO VARCHAR,
+ FL_VALOR DOUBLE,
+ DT_HORA VARCHAR,
+ IN_QUALIDADE INT
+ )
+  WITH (KAFKA_TOPIC='xomni-historic', PARTITIONS=1, VALUE_FORMAT='AVRO');
+```
+
+- Inserir dados no stream acima
+
+```sql
+INSERT INTO HISTORIC (ROWKEY, DT_DATA, CH_TAG, CH_TIPO, FL_VALOR, DT_HORA, IN_QUALIDADE)
+  VALUES ('02/09/2020TAG_1A101:02:03128', '02/09/2020', 'TAG_1','A',12.1,'01:02:03', 128);
+```
+
+- Criar stream - Exemplo Confluent
 
 ```sql
 CREATE STREAM transactions (
@@ -94,3 +141,9 @@ CREATE TABLE possible_anomalies WITH (
 > - Column aliases are surrounded by backticks, which tells ksqlDB to use exactly that case. ksqlDB uppercases identity names by default.
 > - The underlying Kafka topic for this table is explicitly set to possible_anomalies.
 > - The Avro schema that ksqlDB generates for the value portion of its records is recorded under the namespace io.ksqldb.tutorial.PossibleAnomaly. You'll use this later in the microservice.
+
+- Funcão de agregação
+
+```sql
+ select EARLIEST_BY_OFFSET(ROWKEY), EARLIEST_BY_OFFSET(ETIQUETA), COLLECT_SET(TEXTO_COMANDO),  COLLECT_SET(TAG_EXTERNA) from CMDS group by (ROWKEY) emit changes;
+```
