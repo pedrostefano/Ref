@@ -1,4 +1,3 @@
-
 # Kafka Connect
 
 ## REST API Examples
@@ -45,7 +44,7 @@ CREATE SOURCE CONNECTOR `xomni-get-commands` WITH(
  "connection.url"='jdbc:oracle:thin:@//192.168.2.92:1521/xe',
  "db.timezone"='America/Sao_Paulo',
  "connection.user"='xomniapp',
- "connection.password"='SQL',
+ "connection.password"='PASSWORD',
  "mode"='bulk',
  "poll.interval.ms"='600000',
  "batch.max.rows"='1000',
@@ -67,7 +66,7 @@ CREATE SINK CONNECTOR `c-xomni-historic` WITH(
  "connector.class"='io.confluent.connect.jdbc.JdbcSinkConnector',
  "connection.url"='jdbc:sqlserver://192.168.1.141;databaseName=cimsoa',
  "connection.user"='sa',
- "connection.password"='2020#concert',
+ "connection.password"='PASSWORD',
  "topics"='xomni-historic',
  "db.timezone"='America/Sao_Paulo',
  "insert.mode"='upsert',
